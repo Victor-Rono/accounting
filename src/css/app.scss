@@ -1,0 +1,86 @@
+// app global css in SCSS form
+.text-explora {
+  font-family: 'Pompiere', 'Roboto', 'Helvetica', 'Helvetica Nueue', sans-serif;
+}
+
+@media (max-width: $breakpoint-xs-max) {
+  .small-screen-only {
+    display: block;
+  }
+
+  .large-screen-only {
+    display: none;
+  }
+}
+
+@media (min-width: $breakpoint-xs-max) {
+  .small-screen-only {
+    display: none;
+  }
+
+  .large-screen-only {
+    display: block;
+  }
+
+  .my-card {
+    max-width: 1000px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .ipad-and-above {
+    display: none;
+  }
+}
+
+.constrained {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.rounded-box {
+  border-radius: 2px;
+}
+
+.myselector {
+  min-width: 16rem;
+  max-width: 16rem;
+}
+
+.extra-constrained {
+  max-width: 450px;
+  margin: 0 auto;
+}
+
+.extra-constrained1 {
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+.md-button {
+  width: 150px;
+}
+
+.bordered {
+  border: 1px solid grey;
+  border-radius: 6px;
+}
+
+.my-table {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 0.5rem;
+}
+.tbl {
+  min-width: 25rem;
+  border-radius: 3px;
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.blue-border {
+  border: 1px solid rgb(40, 62, 189);
+  border-radius: 8px;
+}

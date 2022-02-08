@@ -9,7 +9,7 @@
       <u class="text-primary text-bold text-h6"
         >OPEN ORDERS:&nbsp;
         {{
-          this.allOrders.filter((r) => {
+          this.allOrders?.filter((r) => {
             return r.authorized == 'Yes' && r.closed == 'No';
           }).length
         }}</u
@@ -20,10 +20,68 @@
       <div class="row justify-center" v-for="order in this.allOrders">
         <OpenCard
           :order="order"
+          :loadData="loadData"
           v-if="order.authorized == 'Yes' && order.closed == 'No'"
         />
       </div>
     </div>
+
+    <q-dialog v-model="alert">
+      <q-card>
+        <div class="q-ma-md">
+          <p class="text-bold text-center" style="text-transform: uppercase">
+            <y class="text-pink">{{ this.componentData.fullName }}</y> ORDER #{{
+              this.order.id
+            }}
+            &nbsp;
+            <q-btn
+              flat
+              size="sm"
+              class="text-primary"
+              icon="fas fa-gavel"
+              no-caps
+              ><q-badge class="bg-red text-white" floating rounded>{{
+                this.bids.length
+              }}</q-badge></q-btn
+            >
+          </p>
+        </div>
+        <div class="text-center text-h6">
+          BIDS FOR ORDER NUMBER {{ this.component.id }}
+        </div>
+        <div class="q-ma-md">
+          <table class="my-table" style="min-width: 23rem">
+            <tr class="my-table">
+              <th class="my-table">No.</th>
+              <th class="my-table">Contractor Name</th>
+              <th class="my-table">Price</th>
+              <th class="my-table">Deadline</th>
+              <th class="my-table">Approve</th>
+            </tr>
+            <tr class="my-table" v-for="item in this.bids">
+              <td class="my-table">{{ item.id }}</td>
+              <td class="my-table">{{ item.fullName }}</td>
+              <td class="my-table">{{ item.price }}</td>
+              <td class="my-table">{{ item.deadline }}</td>
+              <td class="my-table">
+                <q-btn
+                  class="bg-positive text-white"
+                  dense
+                  no-caps
+                  icon="check"
+                  @click="approveBid(item.id, item.contractor)"
+                  >Approve</q-btn
+                >
+              </td>
+            </tr>
+          </table>
+          <p class="text-bold q-my-sm text-center">
+            DEPARTMENT: {{ this.order.department }} <br />
+            <y class="text-primary">{{ this.order.date }}</y>
+          </p>
+        </div>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
@@ -57,7 +115,10 @@ OpenCard
          department:ref(null),
          options:this.$store.state.options,
          apiLink:this.$store.state.apiLink,
-         allOrders:ref(null)
+         allOrders:ref(null),
+         componentData:ref(null),
+         bids:ref(null),
+         alert:ref(false)
 
     }
   },
@@ -74,6 +135,19 @@ api.post(this.$store.state.apiLink+'accounting.php',{
 })
 
 },
+
+approveBid(x,y){
+console.log(x, y)
+},
+
+loadData(x, y){
+  this.bids = x;
+  this.componentData = y;
+  console.log(x);
+  console.log(y);
+  this.alert = true;
+},
+
 
      numberWithCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

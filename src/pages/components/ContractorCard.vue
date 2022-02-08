@@ -251,6 +251,7 @@ export default {
             price: this.bidPrice,
             deadline: this.deadLine,
             username: this.$store.state.myAuth.username,
+            fullName: `${this.$store.state.myAuth.firstName} ${this.$store.state.myAuth.lastName}`,
           })
           .then((res) => {
             if (res.data == 'Success') {

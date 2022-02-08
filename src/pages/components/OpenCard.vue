@@ -50,7 +50,7 @@ import VueNumberFormat from 'vue-number-format';
 
 export default {
   name: 'AccountantCard',
-  props: ['order', 'start'],
+  props: ['order', 'start', 'loadData'],
 
   setup() {
     return {};
@@ -102,7 +102,8 @@ export default {
     },
 
     redirect(x) {
-      this.$router.push('view_order?item=' + x);
+      // this.$router.push('view_order?item=' + x);
+      this.loadData(this.bids, this.order);
     },
 
     respond(x) {

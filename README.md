@@ -1,1 +1,1 @@
-Procurement Software for schools and small institutions
+Procurement software for schools and small businesses. VueJs, PHP, MYSQL, Quasar 

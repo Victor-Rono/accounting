@@ -7,7 +7,7 @@
     <!-- if admin show company details -->
     <div class="row justify-center q-mt-md">
       <u class="text-primary text-bold text-h6"
-        >OPEN ORDERS:&nbsp;
+        >PENDING ORDERS:&nbsp;
         {{
           this.allOrders?.filter((r) => {
             return r.authorized == 'Yes' && r.closed == 'No';
@@ -18,7 +18,7 @@
 
     <div class="">
       <div class="row justify-center" v-for="order in this.allOrders">
-        <OpenCard
+        <PendingCard
           :start="this.startup()"
           :order="order"
           :loadData="loadData"
@@ -92,13 +92,13 @@ import { useQuasar } from 'quasar';
 import { api } from 'boot/axios';
 import { useRoute } from 'vue-router';
 import VueNumberFormat from 'vue-number-format';
-import OpenCard from "./components/OpenCard.vue"
+import PendingCard from "./components/PendingCard.vue"
 
 const $q = useQuasar();
 export default {
   name: 'Accountant',
   components:{
-OpenCard
+PendingCard
   },
 
   setup(){
@@ -129,7 +129,7 @@ OpenCard
 startup(){
 
 api.post(this.$store.state.apiLink+'accounting.php',{
-  request:"getOrders",
+  request:"pendingOrders",
   email: this.$store.state.myAuth.email
 },{ timeout: this.$store.state.timeout }).then(res=>{
   this.allOrders = res.data;

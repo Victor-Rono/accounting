@@ -68,6 +68,26 @@ const routes: RouteRecordRaw[] = [
   },
 
   {
+    path: '/pending_orders',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/PendingOrders.vue') }],
+  },
+
+  {
+    path: '/my_contracts',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/MyContract.vue') }],
+  },
+
+  {
+    path: '/success',
+    component: () => import('layouts/MainLayout.vue'),
+    children: [{ path: '', component: () => import('pages/MyContract.vue') }],
+
+  },
+
+
+  {
     path: '/rejected_orders',
     component: () => import('layouts/MainLayout.vue'),
     children: [{ path: '', component: () => import('pages/Rejected.vue') }],

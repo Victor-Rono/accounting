@@ -253,6 +253,20 @@
           <q-item-section>Available Orders</q-item-section>
         </q-item>
 
+        <q-item
+          clickable
+          v-ripple
+          to="/my_contracts"
+          class=""
+          v-if="this.$store.state.myAuth?.occupation == 'Contractor'"
+        >
+          <q-item-section avatar>
+            <q-icon color="" name="fas fa-check" size="sm" />
+          </q-item-section>
+
+          <q-item-section>My Orders</q-item-section>
+        </q-item>
+
         <!-- <y v-for="tab in this.myTabs">
           <q-item clickable v-ripple :to="tab.to" class="">
             <q-item-section avatar>

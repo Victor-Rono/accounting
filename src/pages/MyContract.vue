@@ -7,10 +7,10 @@
     <!-- if admin show company details -->
     <div class="row justify-center q-mt-md">
       <u class="text-primary text-bold text-h6"
-        >COMPLTETED ORDERS:&nbsp;
+        >MY CONTRACTS:&nbsp;
         {{
-          this.allOrders.filter((r) => {
-            return r.completed == 'Yes';
+          this.allOrders?.filter((r) => {
+            return r.authorized == 'Yes' && r.closed == 'No';
           }).length
         }}</u
       >
@@ -18,9 +18,10 @@
 
     <div class="">
       <div class="row justify-center" v-for="order in this.allOrders">
-        <AccountantCard
-          :order="order"
-          v-if="order.contractor && order.completed == 'Yes'"
+        <MyContractCard
+          :orderList="order"
+          :start="this.startup(x)"
+          :started="this.started"
         />
       </div>
     </div>
@@ -33,13 +34,13 @@ import { useQuasar } from 'quasar';
 import { api } from 'boot/axios';
 import { useRoute } from 'vue-router';
 import VueNumberFormat from 'vue-number-format';
-import AccountantCard from "./components/AccountantCard.vue"
+import MyContractCard from "./components/MyContractCard"
 
 const $q = useQuasar();
 export default {
   name: 'Accountant',
   components:{
-AccountantCard
+MyContractCard
   },
 
   setup(){
@@ -48,6 +49,7 @@ AccountantCard
     return {
         myInfo:ref({}),
         visible:ref(false),
+         started:ref(true)
         // showOrderFor:ref(false),
     }
   }
@@ -57,21 +59,25 @@ AccountantCard
          department:ref(null),
          options:this.$store.state.options,
          apiLink:this.$store.state.apiLink,
-         allOrders:ref(null)
+         allOrders:ref(null),
+
 
     }
   },
 
   methods:{
 
-startup(){
-
-api.post(this.$store.state.apiLink+'accounting.php',{
-  request:"completeOrders",
-  email: this.$store.state.myAuth.email
-},{ timeout: this.$store.state.timeout }).then(res=>{
+startup(x){
+if(x || (x === undefined && !this.started)){
+api.post(this.$store.state.apiLink+'contractor.php',{
+  request:"myContracts",
+  contractor: this.$store.state.myAuth.username
+}).then(res=>{
+  console.log("started")
   this.allOrders = res.data;
+  this.started = true;
 })
+}
 
 },
 
@@ -85,9 +91,15 @@ api.post(this.$store.state.apiLink+'accounting.php',{
 
   mounted(){
     // this.fetchInfo();
-this.startup();
+if(this.$route.fullPath == '/success'){
+  this.$router.push('/my_contracts');
+} else{
+
+}
+this.startup(this.started);
       setTimeout(() => {
     this.visible= true;
+    this.started = false;
   }, this.$store.state.spinner * 3);
   }
 

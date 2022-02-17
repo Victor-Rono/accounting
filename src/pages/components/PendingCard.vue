@@ -4,13 +4,18 @@
     flat
     class="q-ma-md blue-border"
     :class="[this.order.sent == 'No' ? 'selected' : 'zz']"
-    @click="redirect(this.order.id)"
   >
     <div class="q-ma-md">
       <p class="text-bold text-center" style="text-transform: uppercase">
         <y class="text-pink">{{ this.order.fullName }}</y> ORDER #{{
           this.order.id
         }}
+        &nbsp;
+        <q-btn flat size="sm" class="text-primary" icon="fas fa-gavel" no-caps
+          ><q-badge class="bg-red text-white" floating rounded>{{
+            this.bids.length
+          }}</q-badge></q-btn
+        >
       </p>
     </div>
 
@@ -28,31 +33,13 @@
         </tr>
       </table>
       <p class="text-bold q-my-sm text-center">
-        DEPARTMENT: {{ this.order.department }} <br />
+        ASSIGNED TO:
+        <q-banner class="bg-positive text-white q-pa-xs" dense>
+          {{ this.order.contractor }}
+        </q-banner>
+        <br />
         <y class="text-primary">{{ this.order.date }}</y>
       </p>
-    </div>
-    <div
-      class="row justify-center q-pa-md"
-      v-if="this.$route.fullPath != '/completed'"
-    >
-      <q-btn
-        @click="respond('accept')"
-        label="Accept"
-        icon="fas fa-check"
-        flat
-        dense
-        class="bg-positive text-white q-mx-lg"
-      />
-
-      <q-btn
-        @click="respond('reject')"
-        label="Reject"
-        icon="close"
-        flat
-        dense
-        class="bg-red text-white q-mx-lg"
-      />
     </div>
   </q-card>
 </template>
@@ -65,8 +52,8 @@ import { useRoute } from 'vue-router';
 import VueNumberFormat from 'vue-number-format';
 
 export default {
-  name: 'AccountantCard',
-  props: ['order', 'start'],
+  name: 'PendingCard',
+  props: ['order', 'start', 'loadData'],
 
   setup() {
     return {};
@@ -78,22 +65,24 @@ export default {
       apiLink: ref(this.$store.state.apiLink),
       options: ref([]),
       contractor: ref(null),
+      bids: ref([]),
     };
   },
   mounted() {
     // this.startup();
-    // api
-    //   .post(
-    //     this.$store.state.apiLink + 'accounting.php',
-    //     {
-    //       request: 'contractors',
-    //     },
-    //     { timeout: this.$store.state.timeout }
-    //   )
-    //   .then((res) => {
-    //     this.options = res.data;
-    //     // console.log(res.data);
-    //   });
+    api
+      .post(
+        this.$store.state.apiLink + 'accounting.php',
+        {
+          request: 'bids',
+          id: this.order.id,
+        },
+        { timeout: this.$store.state.timeout }
+      )
+      .then((res) => {
+        this.bids = res.data;
+        // console.log(res.data);
+      });
   },
 
   methods: {
@@ -106,7 +95,7 @@ export default {
           })
           .then((r) => {
             // var res = ;
-            console.log(r.data);
+            // console.log(r.data);
             this.items = r.data;
           })
           .catch((err) => {
@@ -117,6 +106,7 @@ export default {
 
     redirect(x) {
       // this.$router.push('view_order?item=' + x);
+      this.loadData(this.bids, this.order);
     },
 
     respond(x) {

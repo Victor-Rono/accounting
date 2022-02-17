@@ -38,7 +38,7 @@
         <p class="text-h6 text-pink">
           &nbsp;&nbsp;{{
             this.dashboard?.filter((r) => {
-              return r.authorized == 'Yes' && r.closed == 'No';
+              return r.authorized == 'Yes' && r.closed == 'No' && !r.contractor;
             }).length
           }}
         </p>
@@ -87,6 +87,35 @@
             }).length
           }}
         </p>
+      </q-card>
+    </div>
+
+    <div
+      class="row justify-center q-my-md"
+      v-if="
+        this.$store.state.myAuth?.department == 'Admin' ||
+        this.$store.state.myAuth?.department == 'Finance'
+      "
+    >
+      <q-card
+        class="text-bold text-h6 q-pa-md"
+        bordered
+        flat
+        @click="this.$router.push('/pending_orders')"
+      >
+        PENDING ORDERS:
+        <tag class="text-primary">
+          {{
+            this.dashboard?.filter((r) => {
+              return (
+                r.authorized == 'Yes' &&
+                r.closed == 'No' &&
+                r.completed == 'No' &&
+                r.contractor
+              );
+            }).length
+          }}
+        </tag>
       </q-card>
     </div>
   </div>

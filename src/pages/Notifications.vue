@@ -10,22 +10,11 @@
 
     <div class="q-pa-md" style="">
       <div v-for="item in this.jobs" class="q-my-md">
-        <q-card
-          class="q-pa-xs row justify-center extra-constrained1"
-          bordered
+        <NotificationCard
+          :item="item"
+          :redirect="redirect"
           v-if="item.status == 'Unread'"
-        >
-          <q-card-section>
-            <p class="text-center text-bold text-positive">
-              {{ item.no + '. ' + item.title }}
-            </p>
-            {{ item.message }}<br />
-            <q-separator class="q-mt-sm" />
-            <y class="text-center text-caption text-positive">
-              ~ {{ item.date }}
-            </y>
-          </q-card-section>
-        </q-card>
+        />
       </div>
     </div>
 
@@ -43,22 +32,11 @@
 
     <div class="q-pa-md" style="">
       <div class="q-my-md" v-for="item in this.jobs">
-        <q-card
-          class="q-pa-xs row justify-center extra-constrained1"
-          bordered
+        <NotificationCard
+          :item="item"
+          :redirect="redirect"
           v-if="item.status == 'Read'"
-        >
-          <q-card-section>
-            <p class="text-center text-bold text-primary">
-              {{ item.no + '. ' + item.title }}
-            </p>
-            {{ item.message }}<br />
-            <q-separator class="q-mt-sm" />
-            <y class="text-center text-caption text-primary">
-              ~ {{ item.date }}
-            </y>
-          </q-card-section>
-        </q-card>
+        />
       </div>
     </div>
   </q-page>
@@ -67,7 +45,9 @@
 <script>
 import { defineComponent, ref } from 'vue';
 import { api } from 'boot/axios';
+import NotificationCard from './components/NotificationCard.vue';
 export default {
+  components: { NotificationCard },
   name: 'Jobs',
   data() {
     return {
@@ -91,9 +71,18 @@ export default {
           { timeout: this.$store.state.timeout }
         )
         .then((res) => {
-          console.log(res.data);
+          // console.log(res.data);
           this.$store.commit('notifications', []);
         });
+    },
+    redirect(x) {
+      if (x) {
+        this.$router.push(x);
+        // console.log(x);
+      } else {
+        // console.log(x);
+      }
+      // this.loadData(this.bids, this.order);
     },
 
     startup() {

@@ -10,7 +10,7 @@
         >AVAILABLE ORDERS:&nbsp;
         {{
           this.allOrders?.filter((r) => {
-            return r.authorized == 'Yes' && r.closed == 'No';
+            return r.authorized == 'Yes' && r.closed == 'No' && !r.contractor;
           }).length
         }}</u
       >
@@ -21,7 +21,11 @@
         <ContractorCard
           :order="order"
           :start="this.startup()"
-          v-if="order.authorized == 'Yes' && order.closed == 'No'"
+          v-if="
+            order.authorized == 'Yes' &&
+            order.closed == 'No' &&
+            !order.contractor
+          "
         />
       </div>
     </div>
